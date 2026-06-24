@@ -49,18 +49,18 @@ class RobotRenderer(thrd.Thread):
         """
         self.lock = thrd.Lock()
 
-        self.initialized = False
+        self.initialized = True
         self.paused = False
         self.cur_frame = 0
         self.dt_data = dt_render
-        self.dt_render = dt_render
+        self.dt_render = 0.1
         self.state = model_state
         self.control_input = control_input
         self.error = distance_to_goal
         self.sim_time = sim_time
                 
         # Initialize figure
-        fig = plt.figure(constrained_layout=True, figsize=(14, 5))
+        fig = plt.figure(constrained_layout=True, figsize=(11, 4))
         gs = fig.add_gridspec(2, 2)
         ax = fig.add_subplot(gs[:, 0])
         
@@ -69,10 +69,10 @@ class RobotRenderer(thrd.Thread):
         ax2.set_ylim([np.min(self.control_input), np.max(self.control_input)+10])
         ax2.set_title('Control')
         ax2.set_xlabel('Time')
-        ax2.set_ylabel('m/2')
+        ax2.set_ylabel('m/s')
         
         ax3 = fig.add_subplot(gs[1, 1])
-        ax3.set_title('Distance to Desired State')
+        ax3.set_title('Distance to Desired Position')
         ax3.set_xlabel('Time')
         ax3.set_ylabel('m')
         ax3.set_xlim([0, np.max(self.sim_time)])
@@ -125,7 +125,7 @@ class RobotRenderer(thrd.Thread):
         # Apply translation and rotation as specified by current robot state
         cos_theta, sin_theta = np.cos(np.pi), np.sin(np.pi)
         Tw_r = np.eye(3)
-        Tw_r[0:2,2] = np.array([self.state[0][0], 0])
+        Tw_r[0:2,2] = np.array([self.state[0], 0])
         Tw_r[0:2,0:2] = [[cos_theta,-sin_theta],[sin_theta,cos_theta]]
         Tw_r_obj = transforms.Affine2D(Tw_r)
         self.ax_trans = ax.transData
@@ -169,7 +169,7 @@ class RobotRenderer(thrd.Thread):
     def run(self):
         while True:
             if self.paused == False:
-                self.cur_frame = int(self.cur_frame + self.dt_render/self.dt_data)
+                self.cur_frame = int(self.cur_frame + 1)
                 if self.cur_frame >= len(self.state):
                     self.cur_frame = 0
                 if self.initialized == True:
@@ -179,15 +179,15 @@ class RobotRenderer(thrd.Thread):
             
     def render(self):
         self.lock.acquire()
-        self.figure.canvas.draw_idle()
-
-        self.line.set_data(self.sim_time[0:self.cur_frame], self.state[0:self.cur_frame])
+        
         self.slider.value = self.cur_frame
+        
+        self.line.set_data(self.state[0:self.cur_frame+1], np.zeros([self.cur_frame+1]))
         
         # Update robot position
         c, s = np.cos(0), np.sin(0)
         Tw_r = np.eye(3)
-        Tw_r[0:2,2] = np.array([self.state[self.cur_frame][0], 0])
+        Tw_r[0:2,2] = np.array([self.state[self.cur_frame], 0])
         Tw_r[0:2,0:2] = [[c,-s],[s,c]]
         Tw_r_obj = transforms.Affine2D(Tw_r)
         self.robot_ax[0].set_transform(Tw_r_obj+self.ax_trans)
@@ -195,7 +195,8 @@ class RobotRenderer(thrd.Thread):
 
         self.line_control.set_data(self.sim_time[0:self.cur_frame], self.control_input[0:self.cur_frame])
         self.line_error.set_data(self.sim_time[0:self.cur_frame], self.error[0:self.cur_frame])
-                   
+        
+        self.figure.canvas.draw_idle()           
         self.lock.release()
         
     def pause(self,b=None):

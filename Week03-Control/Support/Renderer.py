@@ -37,7 +37,7 @@ class Renderer(thrd.Thread):
         thrd.Thread.__init__(self)
 
         
-    def initialize(self, model_state, control_input, target_pose=np.zeros(3), dt_data=0.2):
+    def initialize(self, model_state, control_input, target_pose=np.zeros(3), dt_data=0.2, max_sim_time=3):
         """
         Initialize renderer singleton
         :param model_state: Multidimensional array of dimensions 3 x T with sequence of T robot states (x, y, theta)
@@ -53,24 +53,28 @@ class Renderer(thrd.Thread):
         self.dt_data = dt_data
         self.dt_render = dt_data
         self.state = model_state
+        
+        if target_pose.shape[0] < 3:
+            target_pose = np.hstack((target_pose, np.array([0])))
+        
         self.target_pose = target_pose
         self.control_input = control_input
                 
         # Initialize figure
-        fig = plt.figure(constrained_layout=True, figsize=(14, 5))
+        fig = plt.figure(constrained_layout=True, figsize=(11, 4))
         gs = fig.add_gridspec(2, 2)
         ax = fig.add_subplot(gs[:, 0])
         ax2 = fig.add_subplot(gs[0, 1])
-        ax2.set_xlim([0, 3])
+        ax2.set_xlim([0, max_sim_time])
         ax2.set_ylim([np.min(self.control_input[:,0]), np.max(self.control_input[:,0])+1])
         ax2.set_title('Control - Linear Velocity')
         ax2.set_xlabel('Time')
-        ax2.set_ylabel('m/2')
+        ax2.set_ylabel('m/s')
         ax3 = fig.add_subplot(gs[1, 1])
         ax3.set_title('Control - Angular Velocity')
         ax3.set_xlabel('Time')
         ax3.set_ylabel('radians/s')
-        ax3.set_xlim([0, 3])
+        ax3.set_xlim([0, max_sim_time])
         ax3.set_ylim([np.min(self.control_input[:,1]), np.max(self.control_input[:,1])+1])
 
         ax.set_xlim([-2, 2])

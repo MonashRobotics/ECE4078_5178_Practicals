@@ -1,11 +1,14 @@
-import numpy as np 
+import numpy as np
 
-def get_distance_robot_to_goal(robot_state=np.zeros(3), goal=np.zeros(2)):
+def get_distance_robot_to_goal(robot_state=np.zeros(3), goal=np.zeros(3)):
 	"""
 	Compute Euclidean distance between the robot and the goal location
 	:param robot_state: 3D vector (x, y, theta) representing the current state of the robot
-	:param goal: 2D Cartesian coordinates of goal location
+	:param goal: 3D Cartesian coordinates of goal location
 	"""
+
+	if goal.shape[0] < 3:
+		goal = np.hstack((goal, np.array([0])))
 
 	x_goal, y_goal,_ = goal
 	x, y,_ = robot_state
@@ -17,13 +20,16 @@ def get_distance_robot_to_goal(robot_state=np.zeros(3), goal=np.zeros(2)):
 	return rho
 
 
-def get_angle_robot_to_goal(robot_state=np.zeros(3), goal=np.zeros(2)):
+def get_angle_robot_to_goal(robot_state=np.zeros(3), goal=np.zeros(3)):
 	"""
 	Compute angle to the goal relative to the heading of the robot.
 	Angle is restricted to the [-pi, pi] interval
 	:param robot_state: 3D vector (x, y, theta) representing the current state of the robot
-	:param goal: 2D Cartesian coordinates of goal location
+	:param goal: 3D Cartesian coordinates of goal location
 	"""
+
+	if goal.shape[0] < 3:
+		goal = np.hstack((goal, np.array([0])))
 
 	x_goal, y_goal,_ = goal
 	x, y, theta = robot_state
@@ -46,7 +52,7 @@ def clamp_angle(rad_angle=0, min_value=-np.pi, max_value=np.pi):
 	if min_value > 0:
 		min_value *= -1
 
-	angle = (rad_angle + max_value) % (2 * np.pi) + min_value 
+	angle = (rad_angle + max_value) % (2 * np.pi) + min_value
 
 	return angle
 
