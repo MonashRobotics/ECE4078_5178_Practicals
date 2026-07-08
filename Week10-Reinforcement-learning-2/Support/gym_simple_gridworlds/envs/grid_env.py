@@ -1,4 +1,4 @@
-import gymnasium as gym
+import gym
 import numpy as np
 import copy
 from gym import error, spaces, utils
@@ -209,7 +209,7 @@ class GridEnv(gym.Env):
         prob = self.state_transitions[int(cell), action]
 
         # Select state to transition to given transition probabilities
-        next_state = int(np.random.choice(np.arange(self.observation_space.n), p=prob))
+        next_state = np.random.choice(np.arange(self.observation_space.n), 1, p=prob)
 
         # Get (x,y) coordinates associated to that state
         next_x, next_y = np.argwhere(self.grid == next_state)[0]
@@ -220,7 +220,7 @@ class GridEnv(gym.Env):
         reward = self.immediate_rewards[int(cell)]
 
         if done:
-            reward += self.immediate_rewards[next_state]
+            reward += self.immediate_rewards[int(next_state)]
 
         self.cur_state = (next_x, next_y)
 
@@ -238,7 +238,7 @@ class GridEnv(gym.Env):
             candidate = np.random.randint(self.observation_space.n)
             x, y = np.argwhere(self.grid == candidate)[0]
 
-        return (x, y)
+        return candidate
 
     def reset(self):
         """Resets the environment to an initial state and returns an initial

@@ -1,4 +1,4 @@
-# ECE4078 Practical Week 08
+# ECE4078 Practical Week 09
 
 This week we will cover an introduction to reinforcement learning
 

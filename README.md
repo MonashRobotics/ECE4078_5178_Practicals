@@ -14,4 +14,3 @@ This is the official repository for the practical sessions held in the Intellige
 ## Installation
 
 This repository includes a `pyproject.toml` and `requirements.txt` so you can install dependencies with [uv](https://docs.astral.sh/uv/) or [pip](https://pypi.org/project/pip/).
-

@@ -18,7 +18,7 @@ def encode_policy(grid_env, policy_matrix=None):
     if policy_matrix is None:
 
         policy_matrix = np.array([[3,      3,  3,  -1],
-                                  [0, np.nan,  0,  -1],
+                                  [0, np.NaN,  0,  -1],
                                   [0,      2,  0,   2]])
 
     result_policy = defaultdict(lambda: defaultdict(float))
