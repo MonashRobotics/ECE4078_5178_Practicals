@@ -1,6 +1,6 @@
 import numpy as np
 
-class PenguinPi(object):
+class Robot(object):
 	
 	def __init__(self, wheels_width=0.15, wheels_radius=0.1):
 		
