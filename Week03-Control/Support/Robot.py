@@ -1,6 +1,6 @@
 import numpy as np
 
-class PenguinPi(object):
+class Robot(object):
 
     """Implementation of a differential drive robot
 
@@ -9,7 +9,7 @@ class PenguinPi(object):
     def __init__(self, init_state=np.zeros(3), max_v=20, max_omega=np.pi):
 
         """
-        Initialize a new PenguinPi robot
+        Initialize a new Robot
         :param init_state: Initial state of the robot
         :param max_omega: Maximum angular velocity that can applied to the robot
         :param max_v: Maximum linear velocity that can applied to the robot
