@@ -59,7 +59,7 @@ class RobotJupyterPlot(object):
     def axes_calcs(self):
         # Joint and ee poses
         T = self.robot.fkine_all()
-        Te = self.robot.fkine()
+        Te = self.robot.fkine(self.robot.q)
         Tb = self.robot.base
 
         # Joint and ee position matrix
@@ -114,7 +114,7 @@ class RobotJupyterPlot(object):
         # Remove old ee coordinate frame
         if self.eeframe:
 
-            Te = self.robot.fkine()
+            Te = self.robot.fkine(self.robot.q)
             self.ee_text.set_text("End effector\n{}".format(np.round(Te.A, 2)))
 
             self.ee_axes[0].remove()
@@ -165,7 +165,7 @@ class RobotJupyterPlot(object):
 
         # Remove old ee coordinate frame
         if self.eeframe:
-            Te = self.robot.fkine()
+            Te = self.robot.fkine(self.robot.q)
             self.ee_text.set_text("End effector\n{}".format(np.round(Te.A, 2)))
 
             self.ee_axes[0].remove()
@@ -198,7 +198,7 @@ class RobotJupyterPlot(object):
 
         # Plot ee coordinate frame
         if self.eeframe:
-            Te = self.robot.fkine()
+            Te = self.robot.fkine(self.robot.q)
             self.ee_text = self.ax.text(0.0, 0.0, 2.0, "End effector\n{}".format(np.round(Te.A, 2)))
 
             self.ee_axes.append(
@@ -243,7 +243,7 @@ class RobotJupyterPlot(object):
         # Plot ee coordinate frame
         if self.eeframe:
 
-            Te = self.robot.fkine()
+            Te = self.robot.fkine(self.robot.q)
             self.ee_text = self.ax.text(0.0, 2.0, "End effector\n{}".format(np.round(Te.A, 4)))
 
             self.ee_axes.append(
