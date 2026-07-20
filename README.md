@@ -6,6 +6,7 @@ This is the official repository for the practical sessions held in the Intellige
 - In class we will work through the corresponding week's practical.
 - You will be asked to submit the solution to the week's programming exercises the following week.
 - Your submision must follow this naming convention: [Student_ID]_Practical[WeekNumber].ipynb (e.g., pcar6547_Practical01.ipynb).
+- This repo is still in development, and things are subject to change.
 
 ## Marking:
 
