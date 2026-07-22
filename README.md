@@ -7,7 +7,6 @@ This is the official repository for the practical sessions held in the Intellige
 - Some exercises are left for you to complete as take-home practice
 - You should use code from this repo to get ideas for the lab projects
 - This repo is still in development, and things are subject to change.
-value type and format.
 
 ## Installation
 
